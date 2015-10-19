@@ -158,6 +158,8 @@ public interface VirtualMachineCapabilities extends Capabilities {
      * Assists UIs by providing the cloud-specific term for a virtual machine in the cloud.
      * @param locale the locale for which the term should be translated
      * @return the provider-specific term for a virtual server
+     * @throws CloudException an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
     public @Nonnull String getProviderTermForVirtualMachine(@Nonnull Locale locale) throws CloudException, InternalException;
 
@@ -191,10 +193,16 @@ public interface VirtualMachineCapabilities extends Capabilities {
     public @Nullable VisibleScope getVirtualMachineProductVisibleScope();
 
     /**
+     * Returns an array of words that are reserved from use in usernames
+     * @return an array of reserved usernames
+     */
+    public @Nonnull String[] getVirtualMachineReservedUserNames();
+
+    /**
      * Indicates whether the VM requires a Data Center to be specified upon launch
      * @return the requirements for data centers upon VM launch
-     * @throws CloudException
-     * @throws InternalException
+     * @throws CloudException an error occurred in the cloud identifying this requirement
+     * @throws InternalException an error occurred within the Dasein Cloud implementation identifying this requirement
      */
     public @Nonnull Requirement identifyDataCenterLaunchRequirement() throws CloudException, InternalException;
 
@@ -209,9 +217,17 @@ public interface VirtualMachineCapabilities extends Capabilities {
     public @Nonnull Requirement identifyImageRequirement(@Nonnull ImageClass cls) throws CloudException, InternalException;
 
     /**
-     * Indicates the degree to which specifying a user name and password at launch is required.
+     * Indicates the degree with which specifying a username (whether using a password or sshkey) is required.
+     * @return the requirements level for specifying a username at launch
+     * @throws CloudException an error occurred in the cloud identifying this requirement
+     * @throws InternalException an error occurred within the Dasein Cloud implementation identifying this requirement
+     */
+    public @Nonnull Requirement identifyUsernameRequirement() throws CloudException, InternalException;
+
+    /**
+     * Indicates the degree to which specifying a password at launch is required.
      * @param platform the platform for which password requirements are being sought
-     * @return the requirements level for specifying a user name and password at launch
+     * @return the requirements level for specifying a password at launch
      * @throws CloudException an error occurred in the cloud identifying this requirement
      * @throws InternalException an error occurred within the Dasein Cloud implementation identifying this requirement
      */
@@ -245,8 +261,8 @@ public interface VirtualMachineCapabilities extends Capabilities {
     /**
      * Indicates whether a subnet is required to be specified when launching a VM into a VLAN
      * @return the requirements level for a subnet during launch
-     * @throws CloudException
-     * @throws InternalException
+     * @throws CloudException an error occurred in the cloud identifying this requirement
+     * @throws InternalException an error occurred within the Dasein Cloud implementation identifying this requirement
      */
     public @Nonnull Requirement identifySubnetRequirement() throws CloudException, InternalException;
 
@@ -303,18 +319,21 @@ public interface VirtualMachineCapabilities extends Capabilities {
     public boolean isUserDefinedPrivateIPSupported() throws CloudException, InternalException;
 
     /**
-     * Identifies what architectures are supported in this cloud.
-     * @return a list of supported architectures
-     * @throws InternalException an error occurred within the Dasein Cloud implementation calculating supported architectures
-     * @throws CloudException an error occurred fetching the list of supported architectures from the cloud
+     * Indicates whether the VM root password (or administrator password in Windows) is returned encrypted with the provided ssh key
+     * @return true if the password is encrypted
+     * @throws CloudException an error occurred querying the cloud for this kind of support
+     * @throws InternalException an error inside the Dasein Cloud implementation occurred determining support
      */
+    public boolean isRootPasswordSSHKeyEncrypted() throws CloudException, InternalException;
+
+
     public @Nonnull Iterable<Architecture> listSupportedArchitectures() throws InternalException, CloudException;
 
     /**
      * Indicates whether or not the spot virtual machines are supported by the cloud provider.
      * @return true if spot vms are supported
-     * @throws InternalException
-     * @throws CloudException
+     * @throws CloudException an error occurred querying the cloud for this kind of support
+     * @throws InternalException an error inside the Dasein Cloud implementation occurred determining support
      */
     public boolean supportsSpotVirtualMachines() throws InternalException, CloudException;
 
@@ -343,26 +362,62 @@ public interface VirtualMachineCapabilities extends Capabilities {
     public boolean isVMProductDCConstrained() throws InternalException, CloudException;
 
     /**
-     * Non VMState Defined lifecycle supported operations
-     * The 'can' operations return similar values but based on a specific VM state. These return whether or not there is support at all.
+     * Indicates whether the cloud supports VM scaling
+     * @return true if VM scaling is supported
      */
     public boolean supportsAlterVM();
 
+    /**
+     * Indicates whether the cloud supports VM cloning
+     * @return true if VM cloning is supported
+     */
     public boolean supportsClone();
 
+    /**
+     * Indicates whether the cloud supports VM pausing, should typically match {@link #supportsUnPause()}
+     * @return true if VM pausing is supported
+     */
     public boolean supportsPause();
 
+    /**
+     * Indicates whether the cloud supports VM rebooting
+     * @return true if VM rebooting is supported
+     */
     public boolean supportsReboot();
 
+    /**
+     * Indicates whether the cloud supports VM resuming, should typically match {@link #supportsSuspend()}
+     * @return true if VM resuming is supported
+     */
     public boolean supportsResume();
 
+    /**
+     * Indicates whether the cloud supports VM starting, should typically match {@link #supportsStop()}
+     * @return true if VM starting is supported
+     */
     public boolean supportsStart();
 
+    /**
+     * Indicates whether the cloud supports VM stopping, should typically match {@link #supportsStart()}
+     * @return true if VM stopping is supported
+     */
     public boolean supportsStop();
 
+    /**
+     * Indicates whether the cloud supports VM suspending, should typically match {@link #supportsResume()}
+     * @return true if VM suspending is supported
+     */
     public boolean supportsSuspend();
 
+    /**
+     * Indicates whether the cloud supports VM termination
+     * @return true if VM termination is supported
+     */
     public boolean supportsTerminate();
 
+    /**
+     * Indicates whether the cloud supports VM un-pausing, should typically match {@link #supportsPause()}
+     * @return true if VM un-pausing is supported
+     */
     public boolean supportsUnPause();
 }

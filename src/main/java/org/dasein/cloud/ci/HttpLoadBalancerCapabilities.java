@@ -1,3 +1,22 @@
+/**
+ * Copyright (C) 2009-2015 Dell, Inc.
+ * See annotations for authorship information
+ *
+ * ====================================================================
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ====================================================================
+ */
+
 package org.dasein.cloud.ci;
 
 import java.util.Locale;
@@ -5,6 +24,8 @@ import java.util.Locale;
 import javax.annotation.Nonnull;
 
 import org.dasein.cloud.Capabilities;
+import org.dasein.cloud.CloudException;
+import org.dasein.cloud.InternalException;
 import org.dasein.cloud.util.NamingConstraints;
 /**
  * Describes the capabilities of a HttpLoadBalancer within a cloud for a specific account.
@@ -30,7 +51,7 @@ public interface HttpLoadBalancerCapabilities extends Capabilities {
 
     /**
      * Returns the supported ports that HTTP traffic may travel over
-     * @return <code>Iterable<String></code> of available ports.
+     * @return <code>Iterable&lt;String&gt;</code> of available ports.
      */
     public @Nonnull Iterable<String> listSupportedHttpPorts();
 
@@ -114,7 +135,9 @@ public interface HttpLoadBalancerCapabilities extends Capabilities {
 
     /**
      * Identifies the naming conventions that constrain how http load balancers may be named (friendly name) in this cloud.
+     * @throws CloudException an error occurred querying the cloud for naming constraints
+     * @throws InternalException an error occurred assembling the naming constraints object
      * @return naming conventions that constrain http load balancers naming
      */
-    public @Nonnull NamingConstraints getConvergedHttpLoadBalancerNamingConstraints();
+    public @Nonnull NamingConstraints getConvergedHttpLoadBalancerNamingConstraints() throws CloudException, InternalException;
 }

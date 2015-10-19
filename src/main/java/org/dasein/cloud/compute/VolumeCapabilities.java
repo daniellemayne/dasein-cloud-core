@@ -17,7 +17,6 @@
  * ====================================================================
  */
 
-
 package org.dasein.cloud.compute;
 
 import org.dasein.cloud.Capabilities;
@@ -44,64 +43,43 @@ public interface VolumeCapabilities extends Capabilities{
      * Indicates whether the Volume can be attached to a hypothetical virtual machine in the given state
      * @param vmState the state of the hypothetical virtual machine
      * @return true if the volume can be attached in the given state, otherwise false
-     * @throws InternalException
-     * @throws CloudException
+     * @throws InternalException an error occurred in the Dasein Cloud implementation while determining the state
+     * @throws CloudException an error occurred fetching a state from the cloud provider
      */
-    public abstract boolean canAttach(VmState vmState)throws InternalException, CloudException;
+    boolean canAttach(VmState vmState)throws InternalException, CloudException;
 
     /**
      * Indicates whether the Volume can be detached from a hypothetical virtual machine in the given state
      * @param vmState the state of the hypothetical virtual machine
      * @return true if the volume can be detached in the given state, otherwise false
-     * @throws InternalException
-     * @throws CloudException
+     * @throws InternalException an error occurred in the Dasein Cloud implementation while determining the state
+     * @throws CloudException an error occurred fetching a state from the cloud provider
      */
-    public abstract boolean canDetach(VmState vmState)throws InternalException, CloudException;
+    boolean canDetach(VmState vmState)throws InternalException, CloudException;
 
     /**
      * Indicates the maximum number of volumes that may be provisioned in this account.
      * @return the maximum number of volumes that may be provisioned, -1 for unlimited, or -2 for unknown
-     * @throws org.dasein.cloud.InternalException an error occurred within the Dasein Cloud implementation determining the limit
-     * @throws org.dasein.cloud.CloudException an error occurred retrieving the limit from the cloud
+     * @throws InternalException an error occurred within the Dasein Cloud implementation determining the limit
+     * @throws CloudException an error occurred retrieving the limit from the cloud
      */
-    public int getMaximumVolumeCount() throws InternalException, CloudException;
-
-    /**
-     * Indicates the maximum IOPS value allowed in the Volume products for the provider.
-     * @return the maximum IOPS value
-     * @throws org.dasein.cloud.InternalException an error occurred within the Dasein Cloud implementation determining the limit
-     * @throws org.dasein.cloud.CloudException an error occurred retrieving the limit from the cloud
-     * @deprecated use {@link VolumeProduct#getMaxIops()} instead.
-     */
-    @Deprecated
-    public int getMaximumVolumeProductIOPS() throws InternalException, CloudException;
-
-    /**
-     * Indicates the minimum IOPS value allowed in the Volume products for the provider.
-     * @return the minimum IOPS value
-     * @throws org.dasein.cloud.InternalException an error occurred within the Dasein Cloud implementation determining the limit
-     * @throws org.dasein.cloud.CloudException an error occurred retrieving the limit from the cloud
-     * @deprecated use {@link VolumeProduct#getMinIops()} instead.
-     */
-    @Deprecated
-    public int getMinimumVolumeProductIOPS() throws InternalException, CloudException;
+    int getMaximumVolumeCount() throws InternalException, CloudException;
 
     /**
      * Indicates the maximum volume size for IOPS Volumes.
      * @return the maximum size of an IOPS volume
-     * @throws org.dasein.cloud.InternalException an error occurred within the Dasein Cloud implementation determining the limit
-     * @throws org.dasein.cloud.CloudException an error occurred retrieving the limit from the cloud
-     * @deprecated use {@link org.dasein.cloud.compute.VolumeProduct#get}
+     * @throws InternalException an error occurred within the Dasein Cloud implementation determining the limit
+     * @throws CloudException an error occurred retrieving the limit from the cloud
      */
-    public int getMaximumVolumeSizeIOPS() throws InternalException, CloudException;
+    int getMaximumVolumeSizeIOPS() throws InternalException, CloudException;
 
     /**
      * Indicates the minimum volume size for IOPS Volumes.
      * @return the minimum size of an IOPS volume
-     * @throws org.dasein.cloud.InternalException an error occurred within the Dasein Cloud implementation determining the limit
-     * @throws org.dasein.cloud.CloudException an error occurred retrieving the limit from the cloud
+     * @throws InternalException an error occurred within the Dasein Cloud implementation determining the limit
+     * @throws CloudException an error occurred retrieving the limit from the cloud
      */
-    public int getMinimumVolumeSizeIOPS() throws InternalException, CloudException;
+    int getMinimumVolumeSizeIOPS() throws InternalException, CloudException;
 
     /**
      * Indicates the largest provisionable volume.
@@ -109,7 +87,7 @@ public interface VolumeCapabilities extends Capabilities{
      * @throws InternalException an error occurred within the Dasein Cloud implementation determining the limit
      * @throws CloudException an error occurred retrieving the limit from the cloud
      */
-    public @Nullable Storage<Gigabyte> getMaximumVolumeSize() throws InternalException, CloudException;
+    @Nonnull Storage<Gigabyte> getMaximumVolumeSize() throws InternalException, CloudException;
 
     /**
      * Indicates the smallest provisionable volume.
@@ -117,7 +95,7 @@ public interface VolumeCapabilities extends Capabilities{
      * @throws InternalException an error occurred within the Dasein Cloud implementation determining the limit
      * @throws CloudException an error occurred retrieving the limit from the cloud
      */
-    public @Nonnull Storage<Gigabyte> getMinimumVolumeSize() throws InternalException, CloudException;
+    @Nonnull Storage<Gigabyte> getMinimumVolumeSize() throws InternalException, CloudException;
 
     /**
      * Identifies the naming conventions that constrain how volumes may be named (friendly name) in this cloud.
@@ -125,14 +103,14 @@ public interface VolumeCapabilities extends Capabilities{
      * @throws CloudException an error occurred querying the cloud for naming constraints
      * @throws InternalException an error occurred assembling the naming constraints object
      */
-    public @Nonnull NamingConstraints getVolumeNamingConstraints() throws CloudException, InternalException;
+    @Nonnull NamingConstraints getVolumeNamingConstraints() throws CloudException, InternalException;
 
     /**
      * Specifies the provider term for a volume.
      * @param locale the locale into which the term should be translated
      * @return a localized term for a volume using the cloud provider's terminology
      */
-    public @Nonnull String getProviderTermForVolume(@Nonnull Locale locale);
+    @Nonnull String getProviderTermForVolume(@Nonnull Locale locale);
 
     /**
      * Identifies to what degree volume products are supported/required in this cloud. If the support
@@ -141,7 +119,7 @@ public interface VolumeCapabilities extends Capabilities{
      * @throws InternalException an error occurred in the Dasein Cloud implementation determining the support level
      * @throws CloudException an error occurred with the cloud provider determining the support level
      */
-    public @Nonnull Requirement getVolumeProductRequirement() throws InternalException, CloudException;
+    @Nonnull Requirement getVolumeProductRequirement() throws InternalException, CloudException;
 
     /**
      * Identifies whether the device ID is required to be provided upon attach() call or else if the cloud will auto-assign one
@@ -152,7 +130,15 @@ public interface VolumeCapabilities extends Capabilities{
      * @throws CloudException an error occurred with the cloud provider determining the support level
      * @see org.dasein.cloud.compute.VolumeSupport#attach(String, String, String)
      */
-    public @Nonnull Requirement getDeviceIdOnAttachRequirement() throws InternalException, CloudException;
+    @Nonnull Requirement getDeviceIdOnAttachRequirement() throws InternalException, CloudException;
+
+    /**
+     * Indicates whether the cloud supports IOPS specifications for volumes
+     * @return true if IOPS are supported
+     * @throws InternalException an error occurred in the Dasein Cloud implementation determining the support level
+     * @throws CloudException an error occurred with the cloud provider determining the support level
+     */
+    boolean supportsIOPSVolumes() throws InternalException, CloudException;
 
     /**
      * Indicates that a volume size is not necessary (and ultimately ignored) during the volume creation process
@@ -161,7 +147,7 @@ public interface VolumeCapabilities extends Capabilities{
      * @throws InternalException an error occurred within Dasein Cloud determining this feature
      * @throws CloudException an error occurred identifying this requirement from the cloud provider
      */
-    public boolean isVolumeSizeDeterminedByProduct() throws InternalException, CloudException;
+    boolean isVolumeSizeDeterminedByProduct() throws InternalException, CloudException;
 
     /**
      * Lists the possible device IDs supported in this cloud for block devices for different guest operating systems.
@@ -170,7 +156,7 @@ public interface VolumeCapabilities extends Capabilities{
      * @throws InternalException an error occurred in the Dasein Cloud implementation while assembling the list
      * @throws CloudException an error occurred fetching a list from the cloud provider
      */
-    public @Nonnull Iterable<String> listPossibleDeviceIds(@Nonnull Platform platform) throws InternalException, CloudException;
+    @Nonnull Iterable<String> listPossibleDeviceIds(@Nonnull Platform platform) throws InternalException, CloudException;
 
     /**
      * Describes the formats supported in this cloud.
@@ -178,14 +164,26 @@ public interface VolumeCapabilities extends Capabilities{
      * @throws InternalException an error occurred in the Dasein Cloud implementation while assembling the list
      * @throws CloudException an error occurred fetching a list from the cloud provider
      */
-    public @Nonnull Iterable<VolumeFormat> listSupportedFormats() throws InternalException, CloudException;
+    @Nonnull Iterable<VolumeFormat> listSupportedFormats() throws InternalException, CloudException;
 
     /**
      * Indicates whether the volume is required to be created attached to a virtual machine or it it can be created
-     * independantly.
+     * independently.
      * @return requirement level for a VM on create
      * @throws InternalException an error occurred in the Dasein Cloud implementation while assembling the list
      * @throws CloudException an error occurred fetching a list from the cloud provider
      */
-    public @Nonnull Requirement requiresVMOnCreate() throws InternalException, CloudException;
+    @Nonnull Requirement requiresVMOnCreate() throws InternalException, CloudException;
+
+    /**
+     * Indicates whether the cloud supports the separate attachment of volumes to a VM in general.
+     * @return true if volume attaching is supported
+     */
+    boolean supportsAttach();
+
+    /**
+     * Indicates whether the cloud supports the separate detachment of volumes from a VM in general.
+     * @return true if volume detaching is supported
+     */
+    boolean supportsDetach();
 }

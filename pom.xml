@@ -22,7 +22,7 @@
 
     <groupId>org.dasein</groupId>
     <artifactId>dasein-cloud-core</artifactId>
-    <version>2015.06.2</version>
+    <version>2015.10.1</version>
     <packaging>jar</packaging>
 
     <name>dasein-cloud-core</name>
@@ -34,7 +34,7 @@
 
     <inceptionYear>2009</inceptionYear>
 
-    <url>http://github.com/greese/dasein-cloud-core</url>
+    <url>http://github.com/dasein-cloud/dasein-cloud-core</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -53,9 +53,9 @@
     </organization>
 
     <scm>
-        <connection>scm:git:git://github.com/greese/dasein-cloud-core.git</connection>
-        <developerConnection>scm:git:git@github.com:greese/dasein-cloud-core.git</developerConnection>
-        <url>http://github.com/greese/dasein-cloud-core</url>
+        <connection>scm:git:git://github.com/dasein-cloud/dasein-cloud-core.git</connection>
+        <developerConnection>scm:git:git@github.com:dasein-cloud/dasein-cloud-core.git</developerConnection>
+        <url>http://github.com/dasein-cloud/dasein-cloud-core</url>
     </scm>
 
     <parent>
@@ -136,8 +136,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>2.0.2</version>
                 <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
+                    <source>1.7</source>
+                    <target>1.7</target>
                 </configuration>
             </plugin>
             <plugin>
@@ -154,13 +154,18 @@
                         <configuration>
                             <encoding>utf-8</encoding>
                             <quiet>true</quiet>
-                            <links>
-                                <link>http://docs.oracle.com/javaee/6/api/</link>
-                                <link>http://www.dasein.org/api/dasein-utils/</link>
-                            </links>
+                            <javaApiLinks>
+                                <property>
+                                    <name>api_1.8</name>
+                                    <value>http://download.java.net/jdk8/docs/api/</value>
+                                </property>
+                                <property>
+                                    <name>dasein-utils</name>
+                                    <value>http://www.dasein.org/api/dasein-utils/</value>
+                                </property>
+                            </javaApiLinks>
                             <stylesheetfile>dasein-javadoc.css</stylesheetfile>
                             <footer />
-                            <additionalparam>-Xdoclint:none</additionalparam>
                         </configuration>
                     </execution>
                 </executions>
@@ -270,6 +275,18 @@
                             </module>
                         </module>
                     </checkstyleRules>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.6.3</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>sonatype-nexus-staging</serverId>
+                    <nexusUrl>https://oss.sonatype.org</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                    <autoDropAfterRelease>true</autoDropAfterRelease>
                 </configuration>
             </plugin>
         </plugins>

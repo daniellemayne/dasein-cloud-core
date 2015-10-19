@@ -38,32 +38,32 @@ public interface VLANCapabilities extends Capabilities{
     /**
      * Indicates whether or not a NIC can be self-provisioned.
      * @return false if either not supported or cannot be self-provisioned
-     * @throws CloudException
-     * @throws InternalException
+     * @throws CloudException an error occurred in the cloud identifying this capability
+     * @throws InternalException an error occurred within the Dasein Cloud implementation identifying this capability
      */
     public boolean allowsNewNetworkInterfaceCreation() throws CloudException, InternalException;
 
     /**
      * Indicates whether new VLANs can be self-provisioned
      * @return false if VLANs cannot be manually self-provisioned
-     * @throws CloudException
-     * @throws InternalException
+     * @throws CloudException an error occurred in the cloud identifying this capability
+     * @throws InternalException an error occurred within the Dasein Cloud implementation identifying this capability
      */
     public boolean allowsNewVlanCreation() throws CloudException, InternalException;
 
     /**
      * Indicates whether or not Routing Tables can be provisioned
      * @return false if either Routing Tables are not supported or cannot be provisioned
-     * @throws CloudException
-     * @throws InternalException
+     * @throws CloudException an error occurred in the cloud identifying this capability
+     * @throws InternalException an error occurred within the Dasein Cloud implementation identifying this capability
      */
     public boolean allowsNewRoutingTableCreation() throws CloudException, InternalException;
 
     /**
      * Indicates whether or not the cloud allows the creation of subnets
      * @return false if subnets are not supported
-     * @throws CloudException
-     * @throws InternalException
+     * @throws CloudException an error occurred in the cloud identifying this capability
+     * @throws InternalException an error occurred within the Dasein Cloud implementation identifying this capability
      */
     public boolean allowsNewSubnetCreation() throws CloudException, InternalException;
 
@@ -84,6 +84,14 @@ public interface VLANCapabilities extends Capabilities{
     public boolean allowsMultipleTrafficTypesOverVlan() throws CloudException, InternalException;
 
     /**
+     * Indicates whether the cloud allows the removal of certain reserved subnets (such as default or final in a VLAN).
+     * @return true if reserved subnet deletion is allowed
+     * @throws CloudException    an error occurred checking with the cloud for support
+     * @throws InternalException an error occurred in the Dasein Cloud implementation determining support
+     */
+    public boolean allowsDeletionOfReservedSubnets() throws CloudException, InternalException;
+
+    /**
      * Specifies the maximum number of network interfaces that may be provisioned.
      * @return the maximum number of network interfaces that may be provisioned or -1 for no limit or -2 for unknown
      * @throws CloudException    an error occurred requesting the limit from the cloud provider
@@ -94,8 +102,8 @@ public interface VLANCapabilities extends Capabilities{
     /**
      * Specifies the maximum number of VLANs that may be provisioned
      * @return the maximum number of VLANs that may be provisioned or -1 for no limit or -2 for unknown
-     * @throws CloudException
-     * @throws InternalException
+     * @throws CloudException an error occurred in the cloud identifying this capability
+     * @throws InternalException an error occurred within the Dasein Cloud implementation identifying this capability
      */
     public int getMaxVlanCount() throws CloudException, InternalException;
 
@@ -108,14 +116,14 @@ public interface VLANCapabilities extends Capabilities{
 
     /**
      * Identifies the provider term for a subnet
-     * @param locale
+     * @param locale the locale in which the term should be provided
      * @return a loalized term for "Subnet" specific to this cloud provider
      */
     public @Nonnull String getProviderTermForSubnet(@Nonnull Locale locale);
 
     /**
      * Identifies the provider term for a VLAN
-     * @param locale
+     * @param locale the locale in which the term should be provided
      * @return a localized term for "VLAN" specific to this cloud provider
      */
     public @Nonnull String getProviderTermForVlan(@Nonnull Locale locale);
@@ -158,24 +166,24 @@ public interface VLANCapabilities extends Capabilities{
     /**
      * Indicates whether or not this cloud included the concept of network interfaces in its networking support.
      * @return true if this cloud supports network interfaces as part of its networking concepts
-     * @throws CloudException    an error occurred with the cloud provider determining support for network interfaces
-     * @throws InternalException a local error occurred determining support for network interfaces
+     * @throws CloudException an error occurred in the cloud identifying this capability
+     * @throws InternalException an error occurred within the Dasein Cloud implementation identifying this capability
      */
     public boolean isNetworkInterfaceSupportEnabled() throws CloudException, InternalException;
 
     /**
      * Indicates whether or not the subnet is capable of spanning the datacenter in which it is provisioned
      * @return true if the subnet is constrained to a given datacenter
-     * @throws CloudException
-     * @throws InternalException
+     * @throws CloudException an error occurred in the cloud identifying this capability
+     * @throws InternalException an error occurred within the Dasein Cloud implementation identifying this capability
      */
     public boolean isSubnetDataCenterConstrained() throws CloudException, InternalException;
 
     /**
      * Indicates whether or not the VLAN is capable of spanning the datacenter in which it is provisioned
      * @return true if the VLAN is constrained to a given datacenter
-     * @throws CloudException
-     * @throws InternalException
+     * @throws CloudException an error occurred in the cloud identifying this capability
+     * @throws InternalException an error occurred within the Dasein Cloud implementation identifying this capability
      */
     public boolean isVlanDataCenterConstrained() throws CloudException, InternalException;
 
@@ -212,5 +220,5 @@ public interface VLANCapabilities extends Capabilities{
      * @throws CloudException an error occurred querying the cloud for naming constraints
      * @throws InternalException an error occurred assembling the naming constraints object
      */
-    public @Nonnull NamingConstraints getVlanNamingConstraints();
+    public @Nonnull NamingConstraints getVlanNamingConstraints() throws CloudException, InternalException;
 }

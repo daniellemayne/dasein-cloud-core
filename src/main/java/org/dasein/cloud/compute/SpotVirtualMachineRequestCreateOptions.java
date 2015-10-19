@@ -29,7 +29,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * Options for creating Spot VM Requests.
+ * Options for creating Spot VM requests.
  *
  * @author Drew Lyall
  * @author Stas Maksimov
@@ -54,7 +54,9 @@ public class SpotVirtualMachineRequestCreateOptions {
 
     /**
      * Provides options for creating a Spot VM Request
-     *
+     * @param standardProductId provider product identifier
+     * @param machineImageId provider machine image identifier
+     * @param maximumPrice maximum price for this spot request
      * @return an object representing the options for creating a Spot VM
      */
     public static @Nonnull SpotVirtualMachineRequestCreateOptions getInstance( @Nonnull String standardProductId, @Nonnull String machineImageId, @Nonnegative float maximumPrice ) {

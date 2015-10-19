@@ -56,6 +56,7 @@ public interface ImageCapabilities extends Capabilities{
 
     /**
      * Provides the cloud provider specific term for a public image of the specified image class.
+     * @param locale the locale for which the term should be translated
      * @param cls the image class for the desired type
      * @return the term used by the provider to describe a public image
      */
@@ -148,6 +149,14 @@ public interface ImageCapabilities extends Capabilities{
      * @throws InternalException an error occurred within the Dasein cloud implementation while check this capability
      */
     public boolean supportsImageCopy() throws CloudException, InternalException;
+
+    /**
+     * Indicates whether the cloud supports removal/deletion of images
+     * @return true if image removal/deletion is supported
+     * @throws CloudException    an error occurred with the cloud provider when checking this capability
+     * @throws InternalException an error occurred within the Dasein cloud implementation while check this capability
+     */
+    public boolean supportsImageRemoval() throws CloudException, InternalException;
 
     /**
      * Indicates whether or not this cloud supports sharing images with specific accounts.

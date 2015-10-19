@@ -17,15 +17,15 @@
  * ====================================================================
  */
 
-package org.dasein.cloud.network;
+package org.dasein.cloud.util.requester.fluent;
+
+import org.dasein.cloud.CloudException;
+
+import java.util.List;
 
 /**
- * Represents the current state of a connection between a cloud VPN and a physical VPN gateway.
- * <p>Created by George Reese: 6/26/12 2:48 PM</p>
- * @author George Reese (george.reese@imaginary.com)
- * @since 2012-07
- * @version 2012-07 initial version
+ * Created by vmunthiu on 6/17/2015.
  */
-public enum VPNConnectionState {
-    PENDING, AVAILABLE, DELETING, DELETED
+public interface ParallelRequester<T> {
+    List<T> execute() throws CloudException;
 }

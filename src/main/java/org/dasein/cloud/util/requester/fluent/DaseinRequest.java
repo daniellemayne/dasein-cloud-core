@@ -28,6 +28,8 @@ import org.dasein.cloud.util.requester.streamprocessors.*;
 import org.json.JSONObject;
 import org.w3c.dom.Document;
 
+import javax.annotation.Nonnull;
+
 /**
  * DaseinRequest class is a wrapper for Apache HTTP client. It unifies Dasein's REST calls to the clouds APIs.
  *
@@ -51,10 +53,19 @@ public class DaseinRequest implements CompositeRequester {
      * Constructs a new DaseinRequest instance, ready to execute http calls to a specified Uri.
      *
      * @param provider the current CloudProvider instance
-     * @param httpClientBuilder
-     * @param httpUriRequestBuilder
+     * @param httpClientBuilder HTTP client builder
+     * @param httpUriRequestBuilder HTTP URI request builder
     **/
-    public DaseinRequest(CloudProvider provider, HttpClientBuilder httpClientBuilder, HttpUriRequest httpUriRequestBuilder){
+    public DaseinRequest(@Nonnull CloudProvider provider, @Nonnull HttpClientBuilder httpClientBuilder, @Nonnull HttpUriRequest httpUriRequestBuilder){
+        if(provider == null)
+            throw new IllegalArgumentException("Parameter provider cannot be null.");
+
+        if(httpClientBuilder == null)
+            throw new IllegalArgumentException("Parameter httpClientBuilder cannot be null.");
+
+        if(httpUriRequestBuilder == null)
+            throw new IllegalArgumentException("Parameter httpUriRequestBuilder cannot be null");
+
         this.provider = provider;
         this.httpClientBuilder = httpClientBuilder;
         this.httpUriRequestBuilder = httpUriRequestBuilder;
@@ -64,15 +75,18 @@ public class DaseinRequest implements CompositeRequester {
      * Constructs a instance of a DaseinRequestExecutor with a XML stream processor that, once the HTTP request has been
      * finished, will perform a deserialization of the XML response into the specified type T.
      *
-     * <code>
+     * <pre>
      *     DaseinDriverType result = new DaseinRequest(cloudProvider, httpClientBuilder, httpUriRequestBuilder).withXmlProcessor(DaseinDriverType.class).execute();
-     * </code>
+     * </pre>
      *
      * @param classType the type of the expected model
      * @return an instance of the classType type representing the response XML
     **/
     @Override
-    public <T> Requester<T> withXmlProcessor(Class<T> classType) {
+    public <T> Requester<T> withXmlProcessor(@Nonnull Class<T> classType) {
+        if(classType == null)
+            throw new IllegalArgumentException("Parameter classType cannot be null");
+
         return new DaseinRequestExecutor<T>(this.provider, this.httpClientBuilder, this.httpUriRequestBuilder,
                 new DaseinResponseHandler<T>(new XmlStreamToObjectProcessor(), classType));
     }
@@ -83,22 +97,28 @@ public class DaseinRequest implements CompositeRequester {
      * DriverToCoreMapper should be passed in, so that a mapping from a driver model type ( T ) to a Dasein Core
      * model( V ) to be performed after the response is received.
      *
-     * <code>
+     * <pre>
      *     DaseinCoreType result = new DaseinRequest(cloudProvider, httpClientBuilder, httpUriRequestBuilder)
-     *                  .withXmlProcessor(new DriverToCoreMapper<DaseinDriverType, DaseinCoreType>() {
-     *                           @Override
+     *                  .withXmlProcessor(new DriverToCoreMapper&lt;DaseinDriverType, DaseinCoreType&gt;() {
+     *                           &#64;Override
      *                           public DaseinCoreType mapFrom(DaseinDriverType entity) {
      *                                  //map entity to a new instance of DaseinCoreType
      *                           }
      *                      DaseinDriverType.class).execute();
-     * </code>
+     * </pre>
      *
-     * @param mapper an implementation of DriverToCoreMapper<T, V> interface
+     * @param mapper an implementation of {@link DriverToCoreMapper} interface
      * @param classType the type of the expected model
      * @return an instance of the V type which should be a Dasien Core type.
      **/
     @Override
-    public <T, V> Requester<V> withXmlProcessor(DriverToCoreMapper<T, V> mapper, Class<T> classType) {
+    public <T, V> Requester<V> withXmlProcessor(@Nonnull DriverToCoreMapper<T, V> mapper, @Nonnull Class<T> classType) {
+        if(mapper == null)
+            throw new IllegalArgumentException("Parameter mapper cannot be null");
+
+        if(classType == null)
+            throw new IllegalArgumentException("Parameter classType cannot be null");
+
         return new DaseinRequestExecutor<V>(this.provider, this.httpClientBuilder, this.httpUriRequestBuilder,
                 new DaseinResponseHandlerWithMapper<T, V>(new XmlStreamToObjectProcessor(), mapper, classType));
     }
@@ -107,15 +127,18 @@ public class DaseinRequest implements CompositeRequester {
      * Constructs a instance of a DaseinRequestExecutor with a JSON stream processor that, once the HTTP request has been
      * finished will perform a deserialization of the JSON response into the specified type T.
      *
-     * <code>
+     * <pre>
      *     DaseinDriverType result = new DaseinRequest(cloudProvider, httpClientBuilder, httpUriRequestBuilder).withJsonProcessor(DaseinDriverType.class).execute();
-     * </code>
+     * </pre>
      *
      * @param classType the type of the expected model
      * @return an instance of the classType type representing the response JSON
      **/
     @Override
-    public <T> Requester<T> withJsonProcessor(Class<T> classType) {
+    public <T> Requester<T> withJsonProcessor(@Nonnull Class<T> classType) {
+        if(classType == null)
+            throw new IllegalArgumentException("Parameter classType cannot be null");
+
         return new DaseinRequestExecutor<T>(this.provider, this.httpClientBuilder, this.httpUriRequestBuilder,
                 new DaseinResponseHandler<T>(new JsonStreamToObjectProcessor(), classType));
     }
@@ -126,22 +149,28 @@ public class DaseinRequest implements CompositeRequester {
      * DriverToCoreMapper should be passed in, so that a mapping from a driver model type ( T ) to a Dasein Core
      * model( V ) to be performed after the response is received.
      *
-     * <code>
+     * <pre>
      *     DaseinCoreType result = new DaseinRequest(cloudProvider, httpClientBuilder, httpUriRequestBuilder)
-     *                  .withJsonProcessor(new DriverToCoreMapper<DaseinDriverType, DaseinCoreType>() {
-     *                           @Override
+     *                  .withJsonProcessor(new DriverToCoreMapper&lt;DaseinDriverType, DaseinCoreType&gt;() {
+     *                           &#64;Override
      *                           public DaseinCoreType mapFrom(DaseinDriverType entity) {
      *                                  //map entity to a new instance of DaseinCoreType
      *                           }
      *                      DaseinDriverType.class).execute();
-     * </code>
+     * </pre>
      *
-     * @param mapper an implementation of DriverToCoreMapper<T, V> interface
+     * @param mapper an implementation of {@link org.dasein.cloud.util.requester.DriverToCoreMapper} interface
      * @param classType the type of the expected model
      * @return an instance of the V type which should be a Dasien Core type.
      **/
     @Override
-    public <T, V> Requester<V> withJsonProcessor(DriverToCoreMapper<T, V> mapper, Class<T> classType) {
+    public <T, V> Requester<V> withJsonProcessor(@Nonnull DriverToCoreMapper<T, V> mapper, @Nonnull Class<T> classType) {
+        if(mapper == null)
+            throw new IllegalArgumentException("Parameter mapper cannot be null");
+
+        if(classType == null)
+            throw new IllegalArgumentException("Parameter classType cannot be null");
+
         return new DaseinRequestExecutor<V>(this.provider, this.httpClientBuilder, this.httpUriRequestBuilder,
                 new DaseinResponseHandlerWithMapper<T, V>(new JsonStreamToObjectProcessor(), mapper, classType));
     }
@@ -150,9 +179,9 @@ public class DaseinRequest implements CompositeRequester {
      * Constructs a instance of a DaseinRequestExecutor with a stream processor that, once the HTTP request has been
      * finished, will try to parse the response stream into a valid XML Document object.
      *
-     * <code>
+     * <pre>
      *     Document documentResult = new DaseinRequest(cloudProvider, httpClientBuilder, httpUriRequestBuilder).withDocumentProcessor().execute();
-     * </code>
+     * </pre>
     **/
     @Override
     public <T> DaseinRequestExecutor<Document> withDocumentProcessor() {
@@ -164,9 +193,9 @@ public class DaseinRequest implements CompositeRequester {
      * Constructs a instance of a DaseinRequestExecutor with a stream processor that, once the HTTP request has been
      * finished, will try to parse the response stream into a valid JSONObject object.
      *
-     * <code>
+     * <pre>
      *     JSONObject jsonResult = new DaseinRequest(cloudProvider, httpClientBuilder, httpUriRequestBuilder).withJSONObjectProcessor().execute();
-     * </code>
+     * </pre>
      **/
     @Override
     public <T> DaseinRequestExecutor<JSONObject> withJSONObjectProcessor() {
@@ -177,9 +206,9 @@ public class DaseinRequest implements CompositeRequester {
     /**
      * Executes a HTTP request using a string processor for the response.
      *
-     * <code>
+     * <pre>
      *     String result = new DaseinRequest(cloudProvider, httpClientBuilder, httpUriRequestBuilder).execute();
-     * </code>
+     * </pre>
      *
      * @return a string representing the response of the current HTTP call.
     **/
