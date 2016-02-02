@@ -19,13 +19,12 @@
 
 package org.dasein.cloud.ci;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 public class TopologyProvisionOptions {
 
@@ -143,7 +142,7 @@ public class TopologyProvisionOptions {
         return this;
     }
 
-    public @Nonnull TopologyProvisionOptions withNetworkInterface(@Nonnull String networkName, @Nonnull String networkSelfUrl, @Nonnull boolean assignEphemeralIp) {
+    public @Nonnull TopologyProvisionOptions withNetworkInterface(@Nonnull String networkName, @Nullable String networkSelfUrl, @Nonnull boolean assignEphemeralIp) {
         if (false == assignEphemeralIp) {
             this.networkArray.add(new Network(networkName, new ArrayList<AccessConfig>()));
         } else {
