@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2015 Dell, Inc.
+ * Copyright (C) 2009-2016 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -70,16 +70,6 @@ public class TestNewStorageCloudProvider extends AbstractCloud {
             @Override
             public DataCenter getDataCenter(String providerDataCenterId) throws InternalException, CloudException {
                 return null;
-            }
-
-            @Override
-            public String getProviderTermForDataCenter(Locale locale) {
-                return "data center";
-            }
-
-            @Override
-            public String getProviderTermForRegion(Locale locale) {
-                return "region";
             }
 
             @Override

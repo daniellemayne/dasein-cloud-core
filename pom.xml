@@ -22,7 +22,7 @@
 
     <groupId>org.dasein</groupId>
     <artifactId>dasein-cloud-core</artifactId>
-    <version>2015.10.1</version>
+    <version>0.9.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>dasein-cloud-core</name>
@@ -56,15 +56,8 @@
         <connection>scm:git:git://github.com/dasein-cloud/dasein-cloud-core.git</connection>
         <developerConnection>scm:git:git@github.com:dasein-cloud/dasein-cloud-core.git</developerConnection>
         <url>http://github.com/dasein-cloud/dasein-cloud-core</url>
-      <tag>dasein-cloud-core-2015.10.1</tag>
+      <tag>HEAD</tag>
   </scm>
-
-    <parent>
-        <groupId>org.sonatype.oss</groupId>
-        <artifactId>oss-parent</artifactId>
-        <version>5</version>
-    </parent>
-
 
     <dependencies>
         <dependency>
@@ -82,7 +75,7 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
-            <version>4.3.2</version>
+            <version>4.5.1</version>
         </dependency>
         <dependency>
             <groupId>org.bouncycastle</groupId>
@@ -187,7 +180,7 @@
                         <exclude>**/LICENSE-APACHE.txt</exclude>
                     </excludes>
                     <properties>
-                        <year>2009-2015</year>
+                        <year>2009-2016</year>
                         <copyrightHolder>Dell, Inc.</copyrightHolder>
                     </properties>
                 </configuration>
@@ -210,9 +203,6 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
                 <version>2.5.3</version>
-                <configuration>
-                    <goals>deploy nexus-staging:release</goals>
-                </configuration>
             </plugin>
             <plugin>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -288,7 +278,7 @@
                 <executions>
                     <execution>
                         <id>sign-artifacts</id>
-                        <phase>verify</phase>
+                        <phase>deploy</phase>
                         <goals>
                             <goal>sign</goal>
                         </goals>
@@ -322,6 +312,17 @@
     </distributionManagement>
 
     <developers>
+        <developer>
+            <name>Drew Lyall</name>
+            <id>drewlyall</id>
+            <email>drew_lyall -at- dell -dot- com</email>
+            <organization>Dell</organization>
+            <roles>
+                <role>Java Developer</role>
+            </roles>
+            <url>http://software.dell.com</url>
+            <timezone>0</timezone>
+        </developer>
         <developer>
             <name>George Reese</name>
             <id>georgereese</id>

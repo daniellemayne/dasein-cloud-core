@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2015 Dell, Inc.
+ * Copyright (C) 2009-2016 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -340,7 +340,8 @@ public abstract class AbstractFirewallSupport<T extends CloudProvider> extends A
                     if( !target.getProviderFirewallId().equals(ruleEndpoint.getProviderFirewallId()) ) { continue; }
                     break;
                 default:
-                    throw new CloudException("Unknown rule target type: " + type);
+                    //todo should we have a new exception for invalid request data
+                    throw new InternalException("Unknown rule target type: " + type);
 
             }
             revoke(rule.getProviderRuleId());

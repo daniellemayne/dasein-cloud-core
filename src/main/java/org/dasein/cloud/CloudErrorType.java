@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2015 Dell, Inc.
+ * Copyright (C) 2009-2016 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -20,5 +20,15 @@
 package org.dasein.cloud;
 
 public enum CloudErrorType {
-    GENERAL, COMMUNICATION, AUTHENTICATION, THROTTLING, CAPACITY, QUOTA
+    GENERAL,
+    COMMUNICATION,
+    AUTHENTICATION,
+    THROTTLING,
+    CAPACITY,
+    QUOTA,
+    RESOURCE_NOT_FOUND,
+    INVALID_STATE,
+    TASK_IN_PROGRESS,
+    INVALID_USER_DATA,
+    OPERATION_TIMED_OUT
 }

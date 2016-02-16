@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2015 Dell, Inc.
+ * Copyright (C) 2009-2016 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -189,7 +189,7 @@ public class VLAN implements Taggable {
         this.dnsServers = dnsServers;
     }
 
-    public String[] getDnsServers() {
+    public @Nonnull String[] getDnsServers() {
         return (dnsServers == null ? new String[0] : dnsServers);
     }
 
@@ -221,7 +221,7 @@ public class VLAN implements Taggable {
         this.ntpServers = ntpServers;
     }
 
-    public String[] getNtpServers() {
+    public @Nonnull String[] getNtpServers() {
         return (ntpServers == null ? new String[0] : ntpServers);
     }
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2015 Dell, Inc.
+ * Copyright (C) 2009-2016 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -22,6 +22,7 @@ package org.dasein.cloud.platform;
 import org.dasein.cloud.Capabilities;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.InternalException;
+import org.dasein.cloud.Requirement;
 import org.dasein.cloud.util.NamingConstraints;
 
 import javax.annotation.Nonnull;
@@ -52,6 +53,14 @@ public interface RelationalDatabaseCapabilities extends Capabilities{
      * @return the provider term for DB Snapshot
      */
     public @Nonnull String getProviderTermForSnapshot(Locale locale);
+
+    /**
+     * Indicates whether the database engine version is required to be specified during creation of the database
+     * @return the Requirement level
+     * @throws CloudException an error occurred in the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
+     */
+    public @Nonnull Requirement requiresEngineVersion() throws CloudException, InternalException;
 
     /**
      * Indicates whether the RDS Support includes firewall rules
@@ -134,4 +143,22 @@ public interface RelationalDatabaseCapabilities extends Capabilities{
      * @throws InternalException an error occurred assembling the naming constraints object
      */
     public @Nonnull NamingConstraints getRelationalDatabaseNamingConstraints() throws CloudException, InternalException;
+
+    /**
+     * Identifies the naming constraints for admin usernames
+     * @param product the database product for which the constraints apply
+     * @return constraints for the admin usernames
+     * @throws CloudException an error occurred querying the cloud for naming constraints
+     * @throws InternalException an error occurred assembling the naming constraints object
+     */
+    @Nonnull NamingConstraints getAdminUsernameNamingConstraints(DatabaseProduct product) throws CloudException, InternalException;
+
+    /**
+     * Identifies the naming constraints for admin passwords
+     * @param product the database product for which the constraints apply
+     * @return constraints for the admin passwords
+     * @throws CloudException an error occurred querying the cloud for naming constraints
+     * @throws InternalException an error occurred assembling the naming constraints object
+     */
+    @Nonnull NamingConstraints getAdminPasswordNamingConstraints(DatabaseProduct product) throws CloudException, InternalException;
 }

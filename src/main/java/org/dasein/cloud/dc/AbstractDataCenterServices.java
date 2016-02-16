@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2015 Dell, Inc.
+ * Copyright (C) 2009-2016 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -52,28 +52,6 @@ public abstract class AbstractDataCenterServices<T extends CloudProvider> extend
     @Override
     public @Nullable Region getRegion(@Nonnull String providerRegionId) throws InternalException, CloudException {
         throw new OperationNotSupportedException("Getting a region by id is not currently implemented for " + getProvider().getCloudName());
-    }
-
-    @Override
-    @Deprecated
-    public String getProviderTermForDataCenter(Locale locale) {
-        try {
-            return getCapabilities().getProviderTermForDataCenter(locale);
-        }
-        catch( Exception e ) {
-            throw new RuntimeException("Unable to access data center capabilities of " + getProvider().getCloudName(), e);
-        }
-    }
-
-    @Override
-    @Deprecated
-    public String getProviderTermForRegion(Locale locale) {
-        try {
-            return getCapabilities().getProviderTermForRegion(locale);
-        }
-        catch( Exception e ) {
-            throw new RuntimeException("Unable to access data center capabilities of " + getProvider().getCloudName(), e);
-        }
     }
 
     @Override

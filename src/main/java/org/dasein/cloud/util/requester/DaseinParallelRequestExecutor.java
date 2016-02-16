@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2015 Dell, Inc.
+ * Copyright (C) 2009-2016 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -23,8 +23,10 @@ import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.dasein.cloud.CloudErrorType;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.CloudProvider;
+import org.dasein.cloud.GeneralCloudException;
 import org.dasein.cloud.util.requester.fluent.ParallelRequester;
 
 import java.util.ArrayList;
@@ -74,7 +76,7 @@ public class DaseinParallelRequestExecutor<T> extends AbstractDaseinRequestExecu
                 httpClient.close();
             }
         } catch (Exception e) {
-            throw new CloudException(e.getMessage());
+            throw new GeneralCloudException(e);
         }
     }
 }
