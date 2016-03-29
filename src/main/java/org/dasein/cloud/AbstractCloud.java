@@ -19,15 +19,15 @@
 
 package org.dasein.cloud;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import org.dasein.cloud.admin.AdminServices;
-import org.dasein.cloud.ci.CIServices;
+import org.dasein.cloud.ci.ConvergedInfrastructureServices;
 import org.dasein.cloud.compute.ComputeServices;
 import org.dasein.cloud.identity.IdentityServices;
 import org.dasein.cloud.network.NetworkServices;
 import org.dasein.cloud.platform.PlatformServices;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 /**
  * Simple base implementation of a cloud provider bootstrap object that defaults all services to <code>null</code>.
  * @author George Reese
@@ -61,10 +61,10 @@ public abstract class AbstractCloud extends CloudProvider {
     }
 
     @Override
-    public @Nullable CIServices getCIServices() {
+    public @Nullable ConvergedInfrastructureServices getConvergedInfrastructureServices() {
         CloudProvider compute = getComputeCloud();
 
-        return (compute == null ? null : compute.getCIServices());
+        return (compute == null ? null : compute.getConvergedInfrastructureServices());
     }
     
     @Override

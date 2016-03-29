@@ -20,11 +20,17 @@
 package org.dasein.cloud.ci;
 
 /**
- * [Class Documentation]
- * <p>Created by George Reese: 6/2/13 7:24 PM</p>
- *
- * @author George Reese
+ * User: daniellemayne
+ * Date: 10/03/2016
+ * Time: 11:50
  */
 public enum ConvergedInfrastructureState {
-    PENDING, RUNNING, DELETED
+    ACCEPTED,
+    READY,
+    CANCELLED,
+    FAILED,
+    DELETED,
+    SUCCEEDED,
+
+    PENDING
 }

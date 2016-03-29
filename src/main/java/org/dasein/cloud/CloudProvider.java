@@ -20,7 +20,7 @@
 package org.dasein.cloud;
 
 import org.dasein.cloud.admin.AdminServices;
-import org.dasein.cloud.ci.CIServices;
+import org.dasein.cloud.ci.ConvergedInfrastructureServices;
 import org.dasein.cloud.compute.ComputeServices;
 import org.dasein.cloud.dc.DataCenterServices;
 import org.dasein.cloud.identity.IdentityServices;
@@ -33,7 +33,9 @@ import org.dasein.util.CalendarWrapper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Properties;
 
 /**
  * <p>
@@ -296,10 +298,10 @@ public abstract class CloudProvider {
     public abstract @Nonnull DataCenterServices getDataCenterServices();
 
     /**
-     * Provides access to support for complex topologies managed through converged infrastructure as a cloudy environment.
+     * Provides access to support for complex deployments managed through converged infrastructure as a cloudy environment.
      * @return the services representing converged infrastructure, if any
      */
-    public abstract @Nullable CIServices getCIServices();
+    public abstract @Nullable ConvergedInfrastructureServices getConvergedInfrastructureServices();
 
     public abstract @Nullable ComputeServices getComputeServices();
 
@@ -361,9 +363,7 @@ public abstract class CloudProvider {
         return (getAdminServices() != null);
     }
 
-    public boolean hasCIServices() {
-        return (getCIServices() != null);
-    }
+    public boolean hasConvergedInfrastructureServices() { return (getConvergedInfrastructureServices() != null); }
 
     public boolean hasComputeServices() {
         return (getComputeServices() != null);

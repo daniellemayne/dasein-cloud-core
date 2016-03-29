@@ -19,28 +19,29 @@
 
 package org.dasein.cloud.ci;
 
+import org.dasein.cloud.AbstractProviderService;
+import org.dasein.cloud.CloudProvider;
+
+import javax.annotation.Nullable;
+
 /**
- * Represents the current state of a {@link Topology}.
- * <p>Created by George Reese: 5/31/13 11:07 AM</p>
- * @author George Reese
- * @version 2013.07 initial version
- * @since 2013.07
+ * User: daniellemayne
+ * Date: 10/03/2016
+ * Time: 15:05
  */
-public enum TopologyState {
-    /**
-     * Active and available for provisioning
-     */
-    ACTIVE,
-    /**
-     * Active, but not currently available for provisioning
-     */
-    OFFLINE,
-    /**
-     * In the process of changing state
-     */
-    PENDING,
-    /**
-     * Deleted from the system
-     */
-    DELETED
+public abstract class AbstractConvergedInfrastructureServices<T extends CloudProvider> extends AbstractProviderService<T> implements ConvergedInfrastructureServices {
+    protected AbstractConvergedInfrastructureServices(T provider) {
+        super(provider);
+    }
+
+    @Nullable
+    @Override
+    public ConvergedInfrastructureSupport getConvergedInfrastructureSupport() {
+        return null;
+    }
+
+    @Override
+    public boolean hasConvergedInfrastructureSupport() {
+        return (getConvergedInfrastructureSupport() != null);
+    }
 }

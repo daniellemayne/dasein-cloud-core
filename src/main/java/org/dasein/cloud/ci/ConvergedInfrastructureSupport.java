@@ -24,21 +24,26 @@ import org.dasein.cloud.CloudException;
 import org.dasein.cloud.InternalException;
 import org.dasein.cloud.ResourceStatus;
 import org.dasein.cloud.Tag;
-import org.dasein.cloud.compute.VirtualMachineSupport;
-import org.dasein.cloud.network.VLANSupport;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * Provides access to functionality around complex topologies represented by the Dasein Cloud
- * {@link Topology} concept and the resulting {@link ConvergedInfrastructure} infrastructures.
- * <p>Created by George Reese: 5/30/13 11:37 AM</p>
- * @author George Reese
- * @version 2013.07 initial version
- * @since 2013.07
+ * Provides access to functionality around complex deployments represented by the Dasein Cloud
+ * {@link ConvergedInfrastructure} concept.
+ * <p>Created by Danielle Mayne: 10/03/16 09:03 AM</p>
+ * @author Danielle Mayne
+ * @version 1.0.0 initial version
+ * @since 1.0.0
  */
 public interface ConvergedInfrastructureSupport extends AccessControlledService {
+    /** Provides access to meta-data about converged infrastructure capabilities in the current region of this cloud.
+    * @return a description of the features supported by this region of this cloud
+    * @throws InternalException an error occurred within the Dasein Cloud API implementation
+    * @throws CloudException    an error occurred within the cloud provider
+    */
+    public @Nonnull ConvergedInfrastructureCapabilities getCapabilities() throws InternalException, CloudException;
+
     /**
      * Provides the specified converged infrastructure if it exists.
      * @param ciId the unique ID for the desired converged infrastructure
@@ -49,8 +54,8 @@ public interface ConvergedInfrastructureSupport extends AccessControlledService 
     public @Nullable ConvergedInfrastructure getConvergedInfrastructure(@Nonnull String ciId) throws CloudException, InternalException;
 
     /**
-     * Verifies that the current account context is subscribed for access to topology support in this cloud and region.
-     * @return true if the account is subscribed in the current region for topology support
+     * Verifies that the current account context is subscribed for access to converged infrastructure support in this cloud and region.
+     * @return true if the account is subscribed in the current region for converged infrastructure support
      * @throws CloudException an error occurred with the cloud provider while checking the subscription
      * @throws InternalException an error occurred within Dasein Cloud while processing the request
      */
@@ -64,7 +69,7 @@ public interface ConvergedInfrastructureSupport extends AccessControlledService 
      * @throws CloudException an error occurred in the cloud provider while processing the request
      * @throws InternalException an error occurred within Dasein Cloud while processing the request
      */
-    public @Nonnull Iterable<ConvergedInfrastructure> listConvergedInfrastructures(@Nullable CIFilterOptions options) throws CloudException, InternalException;
+    public @Nonnull Iterable<ConvergedInfrastructure> listConvergedInfrastructures(@Nullable ConvergedInfrastructureFilterOptions options) throws CloudException, InternalException;
 
     /**
      * Lists the status for all converged infrastructures in the current region.
@@ -75,33 +80,13 @@ public interface ConvergedInfrastructureSupport extends AccessControlledService 
     public @Nonnull Iterable<ResourceStatus> listConvergedInfrastructureStatus() throws CloudException, InternalException;
 
     /**
-     * Lists all virtual machines currently part of the specified converged infrastructure. The result is a list of
-     * IDs that may be queried using {@link VirtualMachineSupport#getVirtualMachine(String)}.
-     * @param inCIId the unique ID of the {@link ConvergedInfrastructure} for which VMs are being looked up
-     * @return the list of virtual machine IDs supporting the specified converged infrastructure
-     * @throws InternalException an error occurred within Dasein Cloud while processing the request
-     * @throws CloudException an error occurred in the cloud provider while processing the request
-     */
-    public @Nonnull Iterable<String> listVirtualMachines(@Nonnull String inCIId) throws InternalException, CloudException;
-
-    /**
-     * Lists all VLANs currently part of the specified converged infrastructure. The result is a list of IDs
-     * that may be queried using {@link VLANSupport#getVlan(String)}.
-     * @param inCIId the unique ID of the {@link ConvergedInfrastructure} for which VLANs are being queried
-     * @return a list of VLAN IDs supporting the specified converged infrastructure
-     * @throws CloudException an error occurred in the cloud provider while processing the request
-     * @throws InternalException an error occurred within Dasein Cloud while processing the request
-     */
-    public @Nonnull Iterable<String> listVLANs(@Nonnull String inCIId) throws CloudException, InternalException;
-
-    /**
      * Provisions a cloud infrastructure based on the specified topology provision options.
-     * @param options the options for provisioning a topology-based infrastructure
+     * @param options the options for provisioning a converged infrastructure
      * @return the converged infrastructure that results from this provisioning operation
      * @throws CloudException an error occurred in the cloud provider while processing the request
      * @throws InternalException an error occurred within Dasein Cloud while processing the request
      */
-    public @Nonnull ConvergedInfrastructure provision(@Nonnull CIProvisionOptions options) throws CloudException, InternalException;
+    public @Nonnull ConvergedInfrastructure provision(@Nonnull ConvergedInfrastructureProvisionOptions options) throws CloudException, InternalException;
 
     /**
      * Terminates the specified converged infrastructure, terminating or deleting all resources provisioned during
@@ -112,6 +97,25 @@ public interface ConvergedInfrastructureSupport extends AccessControlledService 
      * @throws InternalException an error occurred within Dasein Cloud while processing the request
      */
     public void terminate(@Nonnull String ciId, @Nullable String explanation) throws CloudException, InternalException;
+
+    /**
+     * Cancels the specified converged infrastructure deployment, leaving all resources already provisioned during
+     * the provisioning process for the converged infrastructure intact. Th operation leaves the deployment in a partial state
+     * @param ciId the unique ID of the converged infrastructure deployment to cancel
+     * @param explanation an optional explanation to submit for audit purposes to the cloud provider
+     * @throws CloudException an error occurred in the cloud provider while processing the request
+     * @throws InternalException an error occurred within Dasein Cloud while processing the request
+     */
+    public void cancelDeployment(@Nonnull String ciId, @Nullable String explanation) throws CloudException, InternalException;
+
+
+    /**
+     * Validates the specified converged infrastructure deployment whether it is syntactically correct and would be accepted by the cloud
+     * @param options the options for provisioning a converged infrastructure that you wish to validate
+     * @throws CloudException an error occurred in the cloud provider while processing the request
+     * @throws InternalException an error occurred within Dasein Cloud while processing the request
+     */
+    public ConvergedInfrastructure validateDeployment(@Nonnull ConvergedInfrastructureProvisionOptions options) throws CloudException, InternalException;
 
     /**
      * Updates meta-data for a converged infrastructure with the new values. It will not overwrite any value that currently
@@ -154,15 +158,4 @@ public interface ConvergedInfrastructureSupport extends AccessControlledService 
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
     public void removeTags(@Nonnull String[] ciIds, @Nonnull Tag... tags) throws CloudException, InternalException;
-
-    /**
-     * @return true if this cloud has http load balancer support
-     */
-    public boolean hasConvergedHttpLoadBalancerSupport();
-
-    /**
-     * Provides access to meta-data about converged infrastructure capabilities in this cloud.
-     * @return a description of the features supported by converged infrastructure for this cloud
-     */
-    public @Nonnull ConvergedInfrastructureCapabilities getCapabilities();
 }

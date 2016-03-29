@@ -23,7 +23,6 @@ import org.dasein.cloud.AbstractProviderService;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.CloudProvider;
 import org.dasein.cloud.InternalException;
-import org.dasein.cloud.ProviderContext;
 import org.dasein.cloud.ResourceStatus;
 import org.dasein.cloud.Tag;
 import org.dasein.cloud.identity.ServiceAction;
@@ -33,15 +32,11 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 
 /**
- * Implements the most basic operations for a cloud with converged infrastructure support with no public topology library. Concrete
- * classes for specific clouds should override the public searching methods if those cloud support a public topology library
- * as well as the methods left unimplemented by this class. In addition, this class provides no-OP implementations of
- * access control and tagging.
- * <p>Created by George Reese: 5/31/13 9:40 AM</p>
- * @author George Reese
- * @version 2013.07 initial version
- * @since 2013.07
+ * User: daniellemayne
+ * Date: 10/03/2016
+ * Time: 15:29
  */
+
 public abstract class AbstractConvergedInfrastructureSupport<T extends CloudProvider> extends AbstractProviderService<T> implements ConvergedInfrastructureSupport {
 
     protected AbstractConvergedInfrastructureSupport(T provider) {
@@ -51,7 +46,7 @@ public abstract class AbstractConvergedInfrastructureSupport<T extends CloudProv
     @Override
     public @Nullable ConvergedInfrastructure getConvergedInfrastructure(@Nonnull String ciId) throws CloudException, InternalException {
         for( ConvergedInfrastructure ci : listConvergedInfrastructures(null) ) {
-            if( ciId.equals(ci.getProviderConvergedInfrastructureId()) ) {
+            if( ciId.equals(ci.getProviderCIId()) ) {
                 return ci;
             }
         }
@@ -63,7 +58,7 @@ public abstract class AbstractConvergedInfrastructureSupport<T extends CloudProv
         ArrayList<ResourceStatus> status = new ArrayList<ResourceStatus>();
 
         for( ConvergedInfrastructure ci : listConvergedInfrastructures(null) ) {
-            status.add(new ResourceStatus(ci.getName(), ci.getCurrentState()));
+            status.add(new ResourceStatus(ci.getName(), ci.getCiState()));
         }
         return status;
     }

@@ -17,11 +17,29 @@
  * ====================================================================
  */
 
-package org.dasein.cloud.ci;
+package org.dasein.cloud;
 
+/**
+ * User: daniellemayne
+ * Date: 10/03/2016
+ * Time: 14:18
+ */
+public enum ResourceType {
+    //Compute
+    VIRTUAL_MACHINE,
+    VOLUME,
 
-// I APPEAR TO BE AN UNUSED ORPHAN!
+    //Network
+    FIREWALL,
+    IP_ADDRESS,
+    IP_FORWARDING_RULE,
+    LOAD_BALANCER,
+    LOAD_BALANCER_HEALTH_CHECK,
+    SUBNET,
+    VLAN,
+    VPN,
 
-public class ConvergedHttpLoadBalancerFilterOptions {
-
+    //Platform
+    DATABASE,
+    KEY_VALUE_DATABASE
 }

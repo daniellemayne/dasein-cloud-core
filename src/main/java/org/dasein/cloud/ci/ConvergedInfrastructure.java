@@ -21,100 +21,92 @@ package org.dasein.cloud.ci;
 
 import org.dasein.cloud.Taggable;
 
-import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
- * A converged infrastructure is a group of cloud resources provisioned from a {@link Topology} that operate together
- * in service of a common purpose. It can be as simple as a single VM or something more complex like two database VMs
- * and two app server VMs or it may be a very complex multi-tier application.
- * <p>Created by George Reese: 6/2/13 7:19 PM</p>
- * @author George Reese
- * @version 2013.07 initial version
- * @since 2013.07
+ *
+ * A converged infrastructure is a grouping of resources that are provisioned together to create a single computing
+ * deployment.
+ * User: daniellemayne
+ * Date: 10/03/2016
+ * Time: 10:21
  */
-public class ConvergedInfrastructure implements Taggable {
+public class ConvergedInfrastructure implements Taggable{
 
-    static public @Nonnull
-    ConvergedInfrastructure getInstance(@Nonnull String ownerId, @Nonnull String regionId, @Nonnull String dataCenterId, @Nonnull String ciId, @Nonnull ConvergedInfrastructureState state, @Nonnull String name, @Nonnull String description, String providerTopologyId) {
+    private String providerCIId;
+    private String name;
+    private String description;
+    private ConvergedInfrastructureState ciState;
+    private long provisioningTimestamp;
+    private List<ConvergedInfrastructureResource> resources;
+    private String providerDatacenterId;
+    private String providerRegionId;
+    private String providerResourcePoolId;
+    private Map<String,String> tags;
+
+    static public @Nonnull ConvergedInfrastructure getInstance(@Nonnull String providerCIId, @Nonnull String name,
+                                                               @Nullable String description, @Nonnull ConvergedInfrastructureState state,
+                                                               @Nullable long provisioningTimestamp, @Nonnull String providerDatacenterId,
+                                                               @Nonnull String providerRegionId, @Nullable String providerResourcePoolId) {
         ConvergedInfrastructure ci = new ConvergedInfrastructure();
-
-        ci.providerOwnerId = ownerId;
-        ci.providerRegionId = regionId;
-        ci.providerDataCenterId = dataCenterId;
-        ci.providerConvergedInfrastructureId = ciId;
-        ci.currentState = state;
+        ci.providerCIId = providerCIId;
         ci.name = name;
         ci.description = description;
-        ci.provisioningTimestamp = System.currentTimeMillis();
-        ci.providerTopologyId = providerTopologyId;
+        ci.ciState = state;
+        ci.provisioningTimestamp = provisioningTimestamp;
+        ci.providerDatacenterId = providerDatacenterId;
+        ci.providerRegionId = providerRegionId;
+        ci.providerResourcePoolId = providerResourcePoolId;
+        ci.resources = new ArrayList<ConvergedInfrastructureResource>();
         return ci;
     }
 
-    private ConvergedInfrastructureState currentState;
-    private String                       description;
-    private String                       name;
-    private String                       providerConvergedInfrastructureId;
-    private String                       providerDataCenterId;
-    private String                       providerOwnerId;
-    private String                       providerRegionId;
-    private String                       providerTopologyId;
-    private long                         provisioningTimestamp;
-    private Map<String,String>           tags;
-    //private String                       selfUrl;
-
-    private ConvergedInfrastructure() { }
-
-    public @Nonnull
-    ConvergedInfrastructureState getCurrentState() {
-        return currentState;
+    public ConvergedInfrastructure withResources(@Nonnull ConvergedInfrastructureResource... resource){
+        for (int i = 0; i<resource.length; i++) {
+            resources.add(resource[i]);
+        }
+        return this;
     }
 
-    public @Nonnull String getDescription() {
-        return description;
+    public @Nonnull String getProviderCIId() {
+        return providerCIId;
     }
 
     public @Nonnull String getName() {
         return name;
     }
 
-    public @Nonnull String getProviderConvergedInfrastructureId() {
-        return providerConvergedInfrastructureId;
+    public @Nullable String getDescription() {
+        return description;
     }
 
-    public @Nullable String getProviderDataCenterId() {
-        return providerDataCenterId;
+    public @Nonnull ConvergedInfrastructureState getCiState() {
+        return ciState;
     }
 
-    public @Nonnull String getProviderOwnerId() {
-        return providerOwnerId;
+    public @Nullable long getProvisioningTimestamp() {
+        return provisioningTimestamp;
+    }
+
+    public @Nonnull List<ConvergedInfrastructureResource> getResources() {
+        return resources;
+    }
+
+    public @Nonnull String getProviderDatacenterId() {
+        return providerDatacenterId;
     }
 
     public @Nonnull String getProviderRegionId() {
         return providerRegionId;
     }
 
-    public @Nullable String getProviderTopologyId() {
-        return providerTopologyId;
-    }
-
-    public @Nonnegative long getProvisioningTimestamp() {
-        return provisioningTimestamp;
-    }
-
-//    public String getSelfUrl() {
-//        return selfUrl;
-//    }
-    /**
-     * Fetches the value of the specified tag key.
-     * @param tag the key of the tag to be fetched
-     * @return the value associated with the specified key, if any
-     */
-    public @Nullable Object getTag(@Nonnull String tag) {
-        return getTags().get(tag);
+    public @Nullable String getProviderResourcePoolId() {
+        return providerResourcePoolId;
     }
 
     @Override
@@ -125,27 +117,20 @@ public class ConvergedInfrastructure implements Taggable {
         return tags;
     }
 
-    /**
-     * Indicates that the converged infrastructure is constrained to the specified data center.
-     * @param dcId the unique ID of the data center to which this converged infrastructure is constrained
-     * @return this
-     */
-    public @Nonnull
-    ConvergedInfrastructure inDataCenter(@Nonnull String dcId) {
-        providerDataCenterId = dcId;
-        return this;
+    public @Nullable Object getTag(@Nonnull String tag) {
+        return getTags().get(tag);
     }
 
-    public @Nonnull
-    ConvergedInfrastructure provisionedAt(@Nonnegative long ts) {
-        provisioningTimestamp = ts;
-        return this;
+    public void setProviderDatacenterId(String providerDatacenterId) {
+        this.providerDatacenterId = providerDatacenterId;
     }
 
-    public @Nonnull
-    ConvergedInfrastructure provisionedFrom(@Nonnull String topologyId) {
-        providerTopologyId = topologyId;
-        return this;
+    public void setProviderRegionId(String providerRegionId) {
+        this.providerRegionId = providerRegionId;
+    }
+
+    public void setProviderResourcePoolId(String providerResourcePoolId) {
+        this.providerResourcePoolId = providerResourcePoolId;
     }
 
     @Override
