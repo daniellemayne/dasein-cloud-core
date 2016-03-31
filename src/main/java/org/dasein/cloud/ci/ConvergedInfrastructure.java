@@ -81,8 +81,8 @@ public class ConvergedInfrastructure implements Taggable{
         return name;
     }
 
-    public @Nullable String getDescription() {
-        return description;
+    public @Nonnull String getDescription() {
+        return description != null ? description: "";
     }
 
     public @Nonnull ConvergedInfrastructureState getCiState() {
