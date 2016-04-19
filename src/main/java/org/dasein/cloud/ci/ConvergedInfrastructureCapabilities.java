@@ -21,6 +21,7 @@ package org.dasein.cloud.ci;
 
 import org.dasein.cloud.Capabilities;
 import org.dasein.cloud.Requirement;
+import org.dasein.cloud.util.NamingConstraints;
 
 import javax.annotation.Nonnull;
 
@@ -41,4 +42,11 @@ public interface ConvergedInfrastructureCapabilities extends Capabilities {
      * @return the requirement for template content on launch
      */
     public @Nonnull Requirement identifyTemplateContentLaunchRequirement();
+
+    /**
+     * Identifies the naming conventions that constrain how converged infrastructure (replica pools) may be named (friendly name) in this cloud.
+     * @return naming conventions that constrain converged infrastructure naming
+     */
+    public @Nonnull
+    NamingConstraints getConvergedInfrastructureNamingConstraints();
 }

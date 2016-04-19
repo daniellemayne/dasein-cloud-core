@@ -29,17 +29,22 @@ import javax.annotation.Nullable;
  */
 public class ConvergedInfrastructureProvisionOptions {
     private String name;
+    private String baseName;
+    private String description;
     private String resourceGroupId;
+    private String providerDatacenterId;
     private String mode;
     private String template;
     private String parameters;
     private boolean templateContentProvided;
+    private int instanceCount;
 
-    static public ConvergedInfrastructureProvisionOptions getInstance(@Nonnull String name, @Nullable String resourceGroupId,
+    static public ConvergedInfrastructureProvisionOptions getInstance(@Nonnull String name, @Nullable String description, @Nullable String resourceGroupId,
                                                                @Nullable String mode, @Nonnull String template,
                                                                @Nonnull String parameters, @Nonnull boolean templateContentProvided) {
         ConvergedInfrastructureProvisionOptions options = new ConvergedInfrastructureProvisionOptions();
         options.name = name;
+        options.description = description;
         options.resourceGroupId = resourceGroupId;
         options.mode = mode;
         options.template = template;
@@ -52,8 +57,20 @@ public class ConvergedInfrastructureProvisionOptions {
         return name;
     }
 
+    public String getBaseName() {
+        return baseName;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
     public String getResourceGroupId() {
         return resourceGroupId;
+    }
+
+    public String getProviderDatacenterId() {
+        return providerDatacenterId;
     }
 
     public String getMode() {
@@ -74,5 +91,24 @@ public class ConvergedInfrastructureProvisionOptions {
      */
     public boolean isTemplateContentProvided() {
         return templateContentProvided;
+    }
+
+    public int getInstanceCount() {
+        return instanceCount;
+    }
+
+    public ConvergedInfrastructureProvisionOptions inDatacenter(String providerDatacenterId) {
+        this.providerDatacenterId = providerDatacenterId;
+        return this;
+    }
+
+    public ConvergedInfrastructureProvisionOptions withBaseName(String baseName) {
+        this.baseName = baseName;
+        return this;
+    }
+
+    public ConvergedInfrastructureProvisionOptions withInstanceCount(int instanceCount) {
+        this.instanceCount = instanceCount;
+        return this;
     }
 }
