@@ -44,4 +44,15 @@ public abstract class AbstractConvergedInfrastructureServices<T extends CloudPro
     public boolean hasConvergedInfrastructureSupport() {
         return (getConvergedInfrastructureSupport() != null);
     }
+
+    @Nullable
+    @Override
+    public TopologySupport getTopologySupport() {
+        return null;
+    }
+
+    @Override
+    public boolean hasTopologySupport() {
+        return (getTopologySupport() == null);
+    }
 }

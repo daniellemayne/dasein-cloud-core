@@ -29,4 +29,11 @@ import javax.annotation.Nullable;
 public interface ConvergedInfrastructureServices {
     public @Nullable ConvergedInfrastructureSupport getConvergedInfrastructureSupport();
     public boolean hasConvergedInfrastructureSupport();
+
+    /**
+     * @return indicates whether or not the cloud provider supports complex resource topologies
+     */
+    public boolean hasTopologySupport(); // templates
+
+    public @Nullable TopologySupport getTopologySupport();
 }
